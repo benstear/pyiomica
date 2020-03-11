@@ -17,19 +17,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     #===============================================#
-    #- name: STEP 3. Install dependencies
-    #  run: |
-    #   pip install --upgrade pip setuptools wheel
-    #   pip install --no-binary :all: nmslib
-    #   pip install .
-    #   pip install python-coveralls
-    #   pip install coveralls
-    #   pip install junit2html
-
-    #- uses: benstear/biopypir-pylint-shell-action@master  
-    #- uses: benstear/pylint-python-action@master
-    #  with:
-    #    report_type: here
+    - name: STEP 3. Install dependencies
+      run: |
+       pip install --upgrade pip setuptools wheel
+       pip install .
+       pip install python-coveralls
+       pip install coveralls
+       pip install junit2html
+       
     - name: STEP 4. Run Linter
       run: |               
        pip install pylint 
