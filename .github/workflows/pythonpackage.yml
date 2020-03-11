@@ -33,8 +33,8 @@ jobs:
     - name: STEP 4. Run Linter
       run: |               
        pip install pylint 
-       pylint pyiomica  --exit-zero --reports=y | 
-    #awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev > pylint-report.txt      
+       pylint pyiomica  --exit-zero --reports=y  
+    # | awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev > pylint-report.txt      
     #--disable=RP0401 --disable=RP0001 --disable=RP0002 \
     #--disable=RP0003 --disable=RP0101 --disable=RP0101 --disable=RP0701
     #> pylint-report.txt
