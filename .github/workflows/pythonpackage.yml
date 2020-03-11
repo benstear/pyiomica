@@ -27,7 +27,7 @@ jobs:
        
     - name: Test Build
       run: setup.py sdist
-      shell: python
+      #shell: python
        
     - name: STEP 4. Run Linter
       run: |               
