@@ -26,9 +26,10 @@ jobs:
        pip install junit2html
        
     - name: Test Build
-      run: setup.py sdist
-      #shell: python
-       
+      run: |
+        python3 setup.py sdist bdist_wheel
+        ls -a
+        
     - name: STEP 4. Run Linter
       run: |               
        pip install pylint 
