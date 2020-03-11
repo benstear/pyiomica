@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest 
     strategy:
       matrix:
-        python-version: [3.6,3.7] # 3.5
+        python-version: [3.6,3.7] # exclude 3.5, mpl 3.x needs python>3.5
         os: [macOS-latest, ubuntu-latest] 
     steps:
     - name: STEP 1. Check-Out Repo 
