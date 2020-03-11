@@ -1,40 +1,59 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Python package
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+---
+name: BIOPYPIR-APPROVED
+on: [push,pull_request] 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
-
+        python-version: [3.5,3.6,3.7] 
+        os: [macOS-latest, ubuntu-latest] 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: STEP 1. Check-Out Repo 
+      uses: actions/checkout@v2     
+    #===============================================#
+    - name: STEP 2. Set-Up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    #===============================================#
+    #- name: STEP 3. Install dependencies
+    #  run: |
+    #   pip install --upgrade pip setuptools wheel
+    #   pip install --no-binary :all: nmslib
+    #   pip install .
+    #   pip install python-coveralls
+    #   pip install coveralls
+    #   pip install junit2html
+
+    #- uses: benstear/biopypir-pylint-shell-action@master  
+    #- uses: benstear/pylint-python-action@master
+    #  with:
+    #    report_type: here
+    - name: STEP 4. Run Linter
+      run: |               
+       pip install pylint 
+       pylint pyiomica  --exit-zero --reports=y | 
+    #awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev > pylint-report.txt      
+    #--disable=RP0401 --disable=RP0001 --disable=RP0002 \
+    #--disable=RP0003 --disable=RP0101 --disable=RP0101 --disable=RP0701
+    #> pylint-report.txt
+    #===============================================#
+    #- name: STEP 5. Pytest-ing and Code Coverage (gen_baseline_images.sh)
+    #  run: |
+    #    python setup.py test \
+    #         --addopts "--mpl-generate-path=tests/baseline_images \
+    #         --color=yes --cov-config .coveragerc --cov-branch \
+    #         --cov=scedar --junitxml=junitxml-doc.xml \
+    #         --ignore=tests/test_cluster/test_mirac_large_data.py"   
+    #    junit2html junitxml-doc.xml coverage-report.html
+    #===============================================#
+    - name: STEP 7. Zip Artifacts
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pytest
+        zip artifacts.zip pylint-report.txt
+    #===============================================#
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: artifacts.zip
+        path: artifacts.zip
