@@ -21,8 +21,8 @@ jobs:
       uses: benstear/python-pylint-github-action@master
       id: linter
       with:
-        package_name: test
-        report_type: score
+        package_name: pyiomoca
+        verbosity: score_only
     - name: print output report
       run: |
         echo ${{ steps.linter.outputs.linting-report }}
