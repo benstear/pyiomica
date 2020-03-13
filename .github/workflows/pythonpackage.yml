@@ -16,6 +16,15 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+      
+    - name: custom linter
+      uses: benstear/python-pylint-github-action@master
+      id: linter
+      with:
+        package_name: test
+        report_type: score
+     
+
     #===============================================#
     - name: STEP 3. Install dependencies
       run: |
@@ -34,14 +43,6 @@ jobs:
         ls -a
         echo #################################
         
-    - name: STEP 4. Run Linter
-      run: |               
-       pip install pylint 
-       pylint pyiomica  --exit-zero --reports=y  | \
-       awk '$0 ~ /Your code/ || $0 ~ /Global/ {print}' | cut -d'/' -f1 | rev | cut -d' ' -f1 | rev > pylint-report.txt      
-    #--disable=RP0401 --disable=RP0001 --disable=RP0002 \
-    #--disable=RP0003 --disable=RP0101 --disable=RP0101 --disable=RP0701
-    #> pylint-report.txt
     #===============================================#
     #- name: STEP 5. Pytest-ing and Code Coverage (gen_baseline_images.sh)
     #  run: |
