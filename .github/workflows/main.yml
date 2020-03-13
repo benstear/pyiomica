@@ -23,7 +23,11 @@ jobs:
       with:
         package_name: test
         report_type: score
-     
+    - name: print output report
+      run: |
+        echo ${{ steps.linter.outputs.linting-report }}
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        cat pylint-report.txt
 
     #===============================================#
     - name: STEP 3. Install dependencies
