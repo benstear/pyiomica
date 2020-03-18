@@ -3,7 +3,7 @@ name: BIOPYPIR-APPROVED
 on: [push,pull_request] 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ${{ matrix.os }} 
     strategy:
       matrix:
         python-version: [3.6,3.7] # exclude 3.5, mpl 3.x needs python>3.5
