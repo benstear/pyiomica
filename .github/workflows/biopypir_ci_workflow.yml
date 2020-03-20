@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6,3.7] # exclude 3.5, mpl 3.x needs python>3.5
-        os:  [ubuntu-latest]  # [macOS-latest,
+        os:  [ubuntu-latest, macOS-latest]
     steps:
     - name: STEP 1. Check-Out Repo 
       uses: actions/checkout@v2     
@@ -16,20 +16,6 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-      
-    - name: custom linter
-      uses: benstear/python-pylint-github-action@master
-      id: linter
-      with:
-        package_name: pyiomoca
-        verbosity: score_only
-    - name: print output report
-      run: |
-        echo ${{ steps.linter.outputs.pylint-report }}
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        cat pylint-report.txt
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        cat ${{ steps.linter.outputs }}
 
     #===============================================#
     - name: STEP 3. Install dependencies
@@ -39,16 +25,16 @@ jobs:
        pip install python-coveralls
        pip install coveralls
        pip install junit2html
+    #===============================================#
        
-       
-    - name: Test Build
-      run: |
-        python3 setup.py sdist bdist_wheel
-        ls -a
-        echo #################################
-        cd dist
-        ls -a
-        echo #################################
+    - name: simple linter
+      run: pylint "$WORKSPACE" --exit-zero --reports=y | > pylint-report.txt
+    #===============================================#
+    - name: test build status
+      run: python setup.py build
+    #===============================================#
+    - name: simple pytest
+      run: pytest "$WORKSPACE/tests/" --color=yes --cov-config .coveragerc --cov-branch 
         
     #===============================================#
     #- name: STEP 5. Pytest-ing and Code Coverage (gen_baseline_images.sh)
