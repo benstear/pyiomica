@@ -33,8 +33,8 @@ jobs:
     - name: test build status
       run: python setup.py build
     #===============================================#
-    - name: simple pytest
-      run: pytest "$WORKSPACE/tests/" --color=yes --cov-config .coveragerc --cov-branch 
+    #- name: simple pytest 
+    #  run: pytest "$WORKSPACE/tests/" --color=yes --cov-config .coveragerc --cov-branch 
         
     #===============================================#
     #- name: STEP 5. Pytest-ing and Code Coverage (gen_baseline_images.sh)
