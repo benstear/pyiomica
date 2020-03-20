@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6,3.7] # exclude 3.5, mpl 3.x needs python>3.5
-        os: [macOS-latest, ubuntu-latest] 
+        os:  [ubuntu-latest]  # [macOS-latest,
     steps:
     - name: STEP 1. Check-Out Repo 
       uses: actions/checkout@v2     
@@ -17,7 +17,6 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
       
-      
     - name: custom linter
       uses: benstear/python-pylint-github-action@master
       id: linter
@@ -26,7 +25,7 @@ jobs:
         verbosity: score_only
     - name: print output report
       run: |
-        echo ${{ steps.linter.outputs.linting-report }}
+        echo ${{ steps.linter.outputs.pylint-report }}
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         cat pylint-report.txt
 
